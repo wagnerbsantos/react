@@ -1,33 +1,39 @@
-import React from "react";
+import React, { ReactElement } from "react";
 import { DragPreviewImage, useDrag } from "react-dnd";
 import ItemTypes from "./ItemTypes";
+import { DragItem } from "./Dropable";
 import "./Dnd.css";
 
 interface DraggableProps {
+  type: string;
   id: number;
-  text: string;
+  source: number;
+  children?: ReactElement;
 }
 
-export const Draggable: React.FC<DraggableProps> = props => {
+export function Draggable(props: DraggableProps) {
   const [{ isDragging }, drag, preview] = useDrag({
-    item: { type: ItemTypes.FILTER, id: props.id },
+    item: { type: props.type, id: props.id },
+    end: (item, monitor) => {
+      const dropResult = monitor.getDropResult();
+      if (item && dropResult) {
+        alert(dropResult.name);
+      }
+    },
     collect: monitor => ({
       isDragging: !!monitor.isDragging()
     })
   });
 
   return (
-    <>
-      <div
-        ref={drag}
-        style={{
-          opacity: isDragging ? 0.5 : 1
-        }}
-        className="dnd-box"
-      >
-        {props.text}
-        {props.children}
-      </div>
-    </>
+    <div
+      ref={drag}
+      style={{
+        opacity: isDragging ? 0.5 : 1
+      }}
+      className="dnd-box"
+    >
+      {props.children}
+    </div>
   );
-};
+}

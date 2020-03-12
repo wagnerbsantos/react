@@ -2,23 +2,10 @@ import React from "react";
 import { Draggable } from "./Draggable";
 import { DndProvider } from "react-dnd";
 import Backend from "react-dnd-html5-backend";
-import { Dropable } from "./Dropable";
+import { Dropable, DragItem } from "./Dropable";
+import ItemTypes from "./ItemTypes";
 
-function renderSquare(i: number, knightPosition: number) {
-  const x = i;
-  return <Dropable>{renderPiece(x, knightPosition)}</Dropable>;
-}
-
-function renderPiece(x: number, knightPosition: number) {
-  return <Draggable id={x} text={"filtro" + x} />;
-}
-
-export default function Board(knightPosition: number) {
-  const squares = [];
-  for (let i = 0; i < 2; i++) {
-    squares.push(renderSquare(i, knightPosition));
-  }
-
+export default function Board() {
   return (
     <DndProvider backend={Backend}>
       <div
@@ -29,7 +16,16 @@ export default function Board(knightPosition: number) {
           display: "flex"
         }}
       >
-        {squares}
+        <Dropable
+          types={[ItemTypes.FILTER]}
+          initialState={[1]}
+          id={1}
+        ></Dropable>
+        <Dropable
+          types={[ItemTypes.FILTER]}
+          initialState={[2]}
+          id={2}
+        ></Dropable>
       </div>
     </DndProvider>
   );
