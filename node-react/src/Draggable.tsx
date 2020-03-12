@@ -1,12 +1,7 @@
 import React from "react";
 import { DragPreviewImage, useDrag } from "react-dnd";
 import ItemTypes from "./ItemTypes";
-
-const knightStyle: React.CSSProperties = {
-  fontSize: 40,
-  fontWeight: "bold",
-  cursor: "move"
-};
+import "./Dnd.css";
 
 interface DraggableProps {
   id: number;
@@ -26,9 +21,9 @@ export const Draggable: React.FC<DraggableProps> = props => {
       <div
         ref={drag}
         style={{
-          ...knightStyle,
           opacity: isDragging ? 0.5 : 1
         }}
+        className="dnd-box"
       >
         {props.text}
         {props.children}

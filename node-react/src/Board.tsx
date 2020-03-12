@@ -2,16 +2,11 @@ import React from "react";
 import { Draggable } from "./Draggable";
 import { DndProvider } from "react-dnd";
 import Backend from "react-dnd-html5-backend";
-import Dropable from "./Dropable";
+import { Dropable } from "./Dropable";
 
 function renderSquare(i: number, knightPosition: number) {
   const x = i;
-  //return <Dropable children={renderPiece(x, knightPosition)}> </Dropable>;
-  return (
-    <Draggable id={x} text={"filtro" + x}>
-      <div>potato</div>
-    </Draggable>
-  );
+  return <Dropable>{renderPiece(x, knightPosition)}</Dropable>;
 }
 
 function renderPiece(x: number, knightPosition: number) {
