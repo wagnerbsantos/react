@@ -7,37 +7,56 @@ import { Draggable } from "./Draggable";
 interface DropableProps {
   id: number;
   types: string[];
-  initialState?: number[];
+  initialState?: string[];
 }
 export interface DragItem {
   type: string;
-  id: number;
+  id: string;
 }
 
 export function Dropable(props: DropableProps) {
   const { initialState } = props;
 
-  const [ids, setIds] = useState<number[]>(initialState || []);
+  const [ids, setIds] = useState<string[]>(initialState || []);
 
-  const [{ isDragging }, drag] = useDrop({
+  const [{ isOver }, drag] = useDrop({
     accept: props.types,
     drop(item: DragItem) {
       if (!ids.includes(item.id)) {
         setIds([...ids, item.id]);
         return { id: props.id };
       }
-    }
+      return { id: -1 };
+    },
+    collect: monitor => ({
+      isOver: !!monitor.isOver()
+    })
+  });
+  const x = React.createRef();
+  const c: ReactElement[] = [];
+  ids.forEach(id => {
+    c.push(
+      <Draggable type={props.types[0]} id={id} func={() => deleteById(id)}>
+        <span>{id}</span>
+      </Draggable>
+    );
   });
 
-  const c = ids.map(id => (
-    <Draggable type={props.types[0]} id={id} source={props.id}>
-      <span>{id}</span>
-    </Draggable>
-  ));
-
   return (
-    <div ref={drag} className="dnd-container">
+    <div
+      ref={drag}
+      style={{ backgroundColor: isOver ? "#888888" : "#FFFFFF" }}
+      className="dnd-container"
+    >
       {c}
     </div>
   );
+  function deleteById(id: string) {
+    var temp = [...ids];
+    var index = temp.indexOf(id);
+    if (index > -1) {
+      temp.splice(index, 1);
+    }
+    setIds(temp);
+  }
 }

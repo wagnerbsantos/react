@@ -6,8 +6,8 @@ import "./Dnd.css";
 
 interface DraggableProps {
   type: string;
-  id: number;
-  source: number;
+  id: string;
+  func: () => void;
   children?: ReactElement;
 }
 
@@ -16,8 +16,8 @@ export function Draggable(props: DraggableProps) {
     item: { type: props.type, id: props.id },
     end: (item, monitor) => {
       const dropResult = monitor.getDropResult();
-      if (item && dropResult) {
-        alert(dropResult.name);
+      if (item && dropResult.id != -1) {
+        props.func();
       }
     },
     collect: monitor => ({

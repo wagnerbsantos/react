@@ -18,12 +18,21 @@ export default function Board() {
       >
         <Dropable
           types={[ItemTypes.FILTER]}
-          initialState={[1]}
+          initialState={["sexo"]}
           id={1}
         ></Dropable>
         <Dropable
           types={[ItemTypes.FILTER]}
-          initialState={[2]}
+          initialState={[]}
+          id={3}
+        ></Dropable>
+        <Dropable
+          types={[ItemTypes.FILTER]}
+          initialState={[
+            "tipo atendimento",
+            "nome profissional",
+            "Unidade de saude"
+          ]}
           id={2}
         ></Dropable>
       </div>
