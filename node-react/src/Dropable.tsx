@@ -1,5 +1,4 @@
 import React, { ReactElement, useState } from "react";
-import ItemTypes from "./ItemTypes";
 import { useDrop } from "react-dnd";
 import { Draggable } from "./Draggable";
 //import { Draggable } from "./Draggable";
@@ -12,6 +11,7 @@ interface DropableProps {
 export interface DragItem {
   type: string;
   id: string;
+  origin: number;
 }
 
 export function Dropable(props: DropableProps) {
@@ -29,15 +29,25 @@ export function Dropable(props: DropableProps) {
       return { id: -1 };
     },
     collect: monitor => ({
-      isOver: !!monitor.isOver()
+      canDrop: !!monitor.canDrop(),
+      isOver: monitor.isOver()
+        ? monitor.getItem().origin !== props.id
+        : monitor.isOver()
     })
   });
-  const x = React.createRef();
   const c: ReactElement[] = [];
   ids.forEach(id => {
     c.push(
-      <Draggable type={props.types[0]} id={id} func={() => deleteById(id)}>
-        <span>{id}</span>
+      <Draggable
+        type={props.types[0]}
+        id={id}
+        origin={props.id}
+        func={() => deleteById(id)}
+      >
+        <div id={props.id + "-" + id}>
+          <input type="hidden" name={props.id + "[]"} value={id}></input>
+          {id}
+        </div>
       </Draggable>
     );
   });

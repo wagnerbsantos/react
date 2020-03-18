@@ -1,23 +1,25 @@
 import React, { ReactElement } from "react";
-import { DragPreviewImage, useDrag } from "react-dnd";
-import ItemTypes from "./ItemTypes";
-import { DragItem } from "./Dropable";
+import { useDrag } from "react-dnd";
 import "./Dnd.css";
 
 interface DraggableProps {
   type: string;
   id: string;
+  origin: number;
   func: () => void;
   children?: ReactElement;
 }
 
 export function Draggable(props: DraggableProps) {
   const [{ isDragging }, drag, preview] = useDrag({
-    item: { type: props.type, id: props.id },
+    item: { type: props.type, id: props.id, origin: props.origin },
     end: (item, monitor) => {
       const dropResult = monitor.getDropResult();
-      if (item && dropResult.id != -1) {
-        props.func();
+      if (dropResult == null) {
+      } else {
+        if (dropResult.id != -1) {
+          props.func();
+        }
       }
     },
     collect: monitor => ({
